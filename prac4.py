@@ -165,7 +165,7 @@ def analogMonitor():
         
 	# Read the voltage sensor data
 	volt_level = ReadChannel(pot_channel)
-        volt = ConvertVolts(sensr_data,2)
+        volt = ConvertVolts(volt_level,2)
 	volt_array.append(round(volt,2))
 
         time.sleep(delay)
