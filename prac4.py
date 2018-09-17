@@ -9,6 +9,7 @@ import datetime
 GPIO.setmode(GPIO.BOARD) # the physical pin number scheme
 
 # Open SPI bus
+spi = None
 spi = spidev.SpiDev()
 spi.open(0,0)
 spi.max_speed_hz=1000000
@@ -183,21 +184,31 @@ GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200
 GPIO.add_event_detect(stopBtn, GPIO.FALLING, callback=stopCallback, bouncetime=200)
 GPIO.add_event_detect(displayBtn, GPIO.FALLING, callback=displayCallBack, bouncetime=200)
 
-while True:
+try:
+	while True:
+		if flag == False:
+			continue
+		
+		else:
+			analogMonitor()
+
+except KeyboardInterrupt:
+	spi.close()
+	GPIO.cleanup()
  
-  # Read the light sensor data
-  light_level = ReadChannel(light_channel)
-  light_volts = ConvertVolts(light_level,2)
- 
-  # Read the temperature sensor data
-  temp_level = ReadChannel(temp_channel)
-  temp_volts = ConvertVolts(temp_level,2)
-  temp       = ConvertTemp(temp_level,2)
- 
-  # Print out results
-  print "--------------------------------------------"
-  print("Light: {} ({}V)".format(light_level,light_volts))
-  print("Temp : {} ({}V) {} deg C".format(temp_level,temp_volts,temp))
- 
-  # Wait before repeating loop
-  time.sleep(delay)
+"""# Read the light sensor data
+light_level = ReadChannel(light_channel)
+light_volts = ConvertVolts(light_level,2)
+
+# Read the temperature sensor data
+temp_level = ReadChannel(temp_channel)
+temp_volts = ConvertVolts(temp_level,2)
+temp       = ConvertTemp(temp_level,2)
+
+# Print out results
+print "--------------------------------------------"
+print("Light: {} ({}V)".format(light_level,light_volts))
+print("Temp : {} ({}V) {} deg C".format(temp_level,temp_volts,temp))
+
+# Wait before repeating loop
+time.sleep(delay)"""
