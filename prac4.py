@@ -18,6 +18,9 @@ frequencyBtn=10
 stopBtn=16
 displayBtn=18
 
+# Global variables
+flag = True
+
 # Setting up
 GPIO.setup(resetBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)           # Button 1 is an input, and activate pulldown resistor
 GPIO.setup(frequencyBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)       # Button 2 is an input, and activate pullup resistor
@@ -95,9 +98,23 @@ def callback2(channel):
         convertTimer = time.time()-time_stamp
         timer = time.strftime("%H:%M:%S", time.localtime(convertTimer))
         print("Timer: {}".format(timer))
+	
+# function for stop
+def stopCallback(channel):
+	global spi
+	global flag
+	if flag:
+		spi.close()
+		flag = False
+	else:
+		flag = True
+		spi = spidev.SpiDev()
+		spi.open(0, 0)
+		spi.max_speed_hz = 100000
 
 GPIO.add_event_detect(frequencyBtn, GPIO.FALLING, callback=callback1, bouncetime=200)
 GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200)
+GPIO.add_event_detect(stopBtn, GPIO.FALLING, callback=stopCallback, bouncetime=200)
 
 while True:
  
