@@ -123,25 +123,25 @@ def displayCallback(channel):
 	global prev_time
 	
 	si = len(values)
-	
+	print("Time      Timer       Pot      Tem      Light")
 	for j in range(si-5, si):
 		s = str(sec[j])
 		index = s.find(".")
 		length = len(s)
 		
 		if sec[j] < 1:
-			print("{} 00:00:0{} {} V".format(real_time[j], s[index+1:length], values[j]))
+			print("{}  00:00:0{}    {} V".format(real_time[j], s[index+1:length], values[j]))
 		
 		elif sec[j] >= 1:
-			print("{} 00:0{}:0{} {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
+			print("{}  00:0{}:0{}    {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
 
 		elif sec[j] >= 10:
-			print("{} 00:00:{} {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
+			print("{}  00:00:{}    {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
 			
 		elif sec[j] == 59:
 			minute += 1
 			prev_time = 0
-			print("{} 0{}:0{}:{} {} V".format(real_time[j], minute, s[index+1:length], values[j]))
+			print("{}  0{}:0{}:{}    {} V".format(real_time[j], minute, s[index+1:length], values[j]))
 			
 GPIO.add_event_detect(frequencyBtn, GPIO.FALLING, callback=callback1, bouncetime=200)
 GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200)
