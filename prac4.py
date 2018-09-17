@@ -83,7 +83,22 @@ def callback1(channel):
                         print "changing frequency to default"
                         delay=0.5
                         count=0
- 
+# function for reset
+def callback2(channel):
+        global time_stamp
+        time_stamp = time.time()
+        clearing = os.system("clear") # command for cleaning the console
+        if clearing==0:
+                print "console cleaned succesfully."
+        else:
+                print "oops something went wrong."
+        convertTimer = time.time()-time_stamp
+        timer = time.strftime("%H:%M:%S", time.localtime(convertTimer))
+        print("Timer: {}".format(timer))
+
+GPIO.add_event_detect(frequencyBtn, GPIO.FALLING, callback=callback1, bouncetime=200)
+GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200)
+
 while True:
  
   # Read the light sensor data
