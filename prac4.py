@@ -32,6 +32,9 @@ stp=False       # start/stop flag
 light_channel = 0
 temp_channel  = 1
 pot_channel = 2
+
+# Define delay between readings
+delay = 0.5 	# 500ms by default
  
 # Function to read SPI data from MCP3008 chip
 # Channel must be an integer 0-7
@@ -60,13 +63,26 @@ def ConvertTemp(data,places):
   	temp 	  = (temp_volt - Offset)*T_COEF
 	temp	  = round(temp, places)
   	return temp
- 
-# Define sensor channels
-light_channel = 0
-temp_channel  = 1
- 
-# Define delay between readings
-delay = 1 #1 second
+
+count=0
+
+# function callback 1 for the frequency change
+def callback1(channel):
+        global delay
+        global count
+        if GPIO.input(frequencyBtn)==0:
+                print "frequency button pressed"
+                count += 1
+                if count==1:
+                        print "changing frequency to 1s"
+                        delay = 1
+                if count==2:
+                        print "changing frequency to 2s"
+                        delay = 2
+                if count>2:
+                        print "changing frequency to default"
+                        delay=0.5
+                        count=0
  
 while True:
  
