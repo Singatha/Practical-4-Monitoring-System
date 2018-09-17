@@ -48,24 +48,18 @@ def ConvertVolts(data,places):
   return volts
  
 # Function to calculate temperature from
-# TMP36 data, rounded to specified
 # number of decimal places.
 def ConvertTemp(data,places):
- 
-  # ADC Value
-  # (approx)  Temp  Volts
-  #    0      -50    0.00
-  #   78      -25    0.25
-  #  155        0    0.50
-  #  233       25    0.75
-  #  310       50    1.00
-  #  465      100    1.50
-  #  775      200    2.50
-  # 1023      280    3.30
- 
-  temp = ((data * 33)/float(1023))
-  temp = round(temp,places)
-  return temp
+	# all values from MCP9700 spec sheet
+	ADC_VREF = 5.0
+	ADC_V_PER_COUNT = ADC_VREF/1023.0
+	T_COEF = 100.0
+	Offset = 0.5
+
+	temp_volt = data * ADC_V_PER_COUNT
+  	temp 	  = (temp_volt - Offset)*T_COEF
+	temp	  = round(temp, places)
+  	return temp
  
 # Define sensor channels
 light_channel = 0
