@@ -4,6 +4,7 @@ import spidev
 import time
 import os
 import RPi.GPIO as GPIO  # Import the RPi Library for GPIO pin control
+import datetime
 
 GPIO.setmode(GPIO.BOARD) # the physical pin number scheme
 
@@ -24,7 +25,9 @@ minute = 0
 prev_time = 0
 real_time = []
 sec = []
-values = []
+light_array = []
+temp_array = []
+volt_array = []
 
 # Setting up
 GPIO.setup(resetBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)           # Button 1 is an input, and activate pulldown resistor
@@ -122,7 +125,7 @@ def displayCallback(channel):
 	global minute
 	global prev_time
 	
-	si = len(values)
+	si = len(volt_array)
 	print("Time      Timer       Pot      Tem      Light")
 	for j in range(si-5, si):
 		s = str(sec[j])
@@ -130,19 +133,50 @@ def displayCallback(channel):
 		length = len(s)
 		
 		if sec[j] < 1:
-			print("{}  00:00:0{}    {} V".format(real_time[j], s[index+1:length], values[j]))
+			print("{}  00:00:0{}    {} V  {} C  {} %".format(real_time[j], s[index+1:length], volt_array[j]), temp_array[j], light_array[j])
 		
 		elif sec[j] >= 1:
-			print("{}  00:0{}:0{}    {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
+			print("{}  00:0{}:0{}    {} V  {}C  {}%".format(real_time[j], int(sec[j]), s[index+1:length], volt_array[j]), temp_array[j], light_array[j])
 
 		elif sec[j] >= 10:
-			print("{}  00:00:{}    {} V".format(real_time[j], int(sec[j]), s[index+1:length], values[j]))
+			print("{}  00:00:{}    {} V  {}C  {}%".format(real_time[j], int(sec[j]), s[index+1:length], volt_array[j]), temp_array[j], light_array[j])
 			
 		elif sec[j] == 59:
 			minute += 1
 			prev_time = 0
-			print("{}  0{}:0{}:{}    {} V".format(real_time[j], minute, s[index+1:length], values[j]))
-			
+			print("{}  0{}:0{}:{}    {} V  {}C  {}%".format(real_time[j], minute, s[index+1:length], volt_array[j]), temp_array[j], light_array[j])
+
+# function for monitoring	
+def analogMonitor():
+	global prev_time
+        start_time = time.time()
+        
+	# Read the light sensor data
+        light_level = ReadChannel(light_channel)
+        light_volts = ConvertVolts(light_level,2)
+	light_array.append(light_volts)
+ 
+        # Read the temperature sensor data
+        temp_level = ReadChannel(temp_channel)
+        temp_volts = ConvertVolts(temp_level,2)
+        temp       = ConvertTemp(temp_level,2)
+	temp_array.append(temp)
+        
+	# Read the voltage sensor data
+	volt_level = ReadChannel(pot_channel)
+        volt = ConvertVolts(sensr_data,2)
+	volt_array.append(round(volt,2))
+
+        time.sleep(delay)
+
+        now = datetime.datetime.now()
+        real_time.append(now.strftime("%H:%M:%S"))
+
+        end_time = time.time()
+        elasped_time = (end_time - start_time)
+        prev_time = prev_time + elasped_time 
+        sec.append(round(prev_time,2))
+
 GPIO.add_event_detect(frequencyBtn, GPIO.FALLING, callback=callback1, bouncetime=200)
 GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200)
 GPIO.add_event_detect(stopBtn, GPIO.FALLING, callback=stopCallback, bouncetime=200)
