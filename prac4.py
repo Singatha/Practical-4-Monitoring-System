@@ -3,11 +3,35 @@
 import spidev
 import time
 import os
- 
+import RPi.GPIO as GPIO  # Import the RPi Library for GPIO pin control
+
+GPIO.setmode(GPIO.BOARD) # the physical pin number scheme
+
 # Open SPI bus
 spi = spidev.SpiDev()
 spi.open(0,0)
 spi.max_speed_hz=1000000
+
+# intuitive names to pins using board numbering
+resetBtn=8
+frequencyBtn=10
+stopBtn=16
+displayBtn=18
+
+# Setting up
+GPIO.setup(resetBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)           # Button 1 is an input, and activate pulldown resistor
+GPIO.setup(frequencyBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)       # Button 2 is an input, and activate pullup resistor
+GPIO.setup(stopBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)            # Button 3 is an input, and activate pullup resistor
+GPIO.setup(displayBtn,GPIO.IN,pull_up_down=GPIO.PUD_UP)         # Button 4 is an input, and activate pullup resistor
+
+time_stamp = time.time()					# to keep track of the time
+
+stp=False       # start/stop flag
+
+# Define sensor channels
+light_channel = 0
+temp_channel  = 1
+pot_channel = 2
  
 # Function to read SPI data from MCP3008 chip
 # Channel must be an integer 0-7
