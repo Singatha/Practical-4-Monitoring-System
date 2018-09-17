@@ -149,6 +149,7 @@ def displayCallback(channel):
 # function for monitoring	
 def analogMonitor():
 	global prev_time
+	global delay
         start_time = time.time()
         
 	# Read the light sensor data
