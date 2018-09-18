@@ -164,6 +164,7 @@ def displayCallback(channel):
 def analogMonitor():
 	global prev_time
 	global delay
+	global minute
         start_time = time.time()
         
 	# Read the light sensor data
@@ -185,12 +186,36 @@ def analogMonitor():
         time.sleep(delay)
 
         now = datetime.datetime.now()
-        real_time.append(now.strftime("%H:%M:%S"))
+	tme = now.strftime("%H:%M:%S")
+        real_time.append(tme)
 
         end_time = time.time()
         elasped_time = (end_time - start_time)
         prev_time = prev_time + elasped_time 
         sec.append(round(prev_time,2))
+	
+	print("Time      Timer       Pot      Temp     Light")
+	    if prev_time < 1:
+		print("{}  0{}:00:0{}    {} V   {} C   {}%".format(tme, minute, int(prev_time*10), volt, temp, light_volts))
+
+	    elif prev_time >= 1 and prev_time <= 9:
+		diff = prev_time - int(prev_time) 
+		if diff < 10:
+		    print("{}  0{}:0{}:0{}    {} V   {} C   {}%".format(tme, minute, int(prev_time), int(diff*10), volt, temp, light_volts))
+		else:
+		    print("{}  0{}:0{}:{}    {} V   {} C   {}%".format(tme, minute, int(prev_time), int(diff*10), volt, temp, light_volts))
+
+
+	    elif prev_time >= 10 and prev_time <= 59:
+		diff = prev_time - int(prev_time)
+		if diff < 10:
+		    print("{}  0{}:{}:0{}    {} V   {} C   {}%".format(tme, minute, int(prev_time), int(diff), volt, temp, light_volts))
+
+		else:
+		    print("{}  0{}:{}:{}    {} V   {} C   {}%".format(tme, minute, int(prev_time), int(diff), volt, temp, light_volts))
+
+	    elif prev_time >= 60:
+		minute += 1
 
 GPIO.add_event_detect(frequencyBtn, GPIO.FALLING, callback=callback1, bouncetime=200)
 GPIO.add_event_detect(resetBtn, GPIO.FALLING, callback=callback2, bouncetime=200)
