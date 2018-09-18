@@ -61,7 +61,13 @@ def ConvertVolts(data,places):
   volts = (data * 3.3) / float(1023)
   volts = round(volts,places)
   return volts
- 
+
+# Function to convert data to light percentage
+def ConvertLight(data,places):
+    vol = (data / float(1023))*100
+    vol = round(vol,places)
+    return vol
+
 # Function to calculate temperature from
 # number of decimal places.
 def ConvertTemp(data,places):
@@ -169,7 +175,7 @@ def analogMonitor():
         
 	# Read the light sensor data
         light_level = ReadChannel(light_channel)
-        light_volts = ConvertVolts(light_level,2)
+        light_volts = ConvertLight(light_level,2)
 	light_array.append(light_volts)
  
         # Read the temperature sensor data
