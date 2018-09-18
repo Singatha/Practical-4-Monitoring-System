@@ -98,6 +98,9 @@ def callback1(channel):
 # function for reset
 def callback2(channel):
         global time_stamp
+	global prev_time
+	global minute
+	
         time_stamp = time.time()
         clearing = os.system("clear") # command for cleaning the console
         if clearing==0:
@@ -107,6 +110,8 @@ def callback2(channel):
         convertTimer = time.time()-time_stamp
         timer = time.strftime("%H:%M:%S", time.localtime(convertTimer))
         print("Timer: {}".format(timer))
+	prev_time = 0
+	minute = 0
 	
 # function for stop
 def stopCallback(channel):
