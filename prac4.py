@@ -139,21 +139,21 @@ def displayCallback(channel):
 		length = len(s)
 		
 		if sec[j] < 1:
-			print("{}  0{}:00:0{}    {} V  {} C  {} %".format(real_time[j], minute, s[index+1:length], volt_array[j], temp_array[j], light_array[j]))
+			print("{}  0{}:00:0{}    {} V  {} C  {}%".format(real_time[j], minute, s[index+1:length], volt_array[j], temp_array[j], light_array[j]))
 		
 		elif sec[j] >= 1 and sec[j] <= 9:
 			if int(s[index+1:length]) < 10:
-				print("{}  0{}:0{}:0{}    {} V  {}C  {}%".format(real_time[j], minute, int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
+				print("{}  0{}:0{}:0{}    {} V  {} C  {}%".format(real_time[j], minute, int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
 				
 			else:
-				print("{}  0{}:0{}:{}    {} V  {}C  {}%".format(real_time[j], minute, int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
+				print("{}  0{}:0{}:{}    {} V  {} C  {}%".format(real_time[j], minute, int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
 
 		elif sec[j] >= 10 and sec[j] <= 59:
 			if int(s[index+1:length]) < 10:
-				print("{}  0{}:{}:0{}    {} V  {}C  {}%".format(real_time[j], minute,  int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
+				print("{}  0{}:{}:0{}    {} V  {} C  {}%".format(real_time[j], minute,  int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
 			
 			else:
-				print("{}  0{}:{}:{}    {} V  {}C  {}%".format(real_time[j], minute,  int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
+				print("{}  0{}:{}:{}    {} V  {} C  {}%".format(real_time[j], minute,  int(sec[j]), int(s[index+1:length]), volt_array[j], temp_array[j], light_array[j]))
 				
 		elif sec[j] >= 60:
 			minute += 1
